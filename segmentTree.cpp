@@ -41,18 +41,12 @@ public:
             return sumFromLeft + sumFromRight;
         }
     }
-    void update(int index, int val){
-        int currNode = 0, currLeft = 0, currRight = n-1;
-        while(currLeft != currRight){
-            int mid = (currLeft + currRight)/2;
-            if(index <= mid) {currRight = mid; currNode = currNode*2 + 1;}
-            else {currLeft = mid+1; currNode = currNode*2 + 2;}
-        }
-        segmentTree[currNode] = val;
-        while(currNode != 0){
-            currNode = (currNode-1) / 2;
-            segmentTree[currNode] = segmentTree[currNode*2 + 1] + segmentTree[currNode*2 + 2];
-        }
+    void update(int index, int val, int currNode = 0, int currLeft = 0, int currRight = n-1){
+        if(currLeft == currRight) {segmentTree[currNode] = val; return;}
+        int mid = currLeft + (currRight-currLeft)/2;
+        if(index <= mid) update(index, val, currNode*2 + 1, currLeft, mid);
+        else update(index, val, currNode*2 + 2, mid+1, currRight);
+        segmentTree[currNode] = segmentTree[currNode*2+1] + segmentTree[currNode*2+2];
     }
 };
 
